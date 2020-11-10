@@ -1,5 +1,6 @@
 ﻿using Amazon;
 using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using System;
 using System.IO;
@@ -11,13 +12,23 @@ namespace S3Core
     {
         static void Main(string[] args)
         {
+            /* uncomment the lines below that you want to test */
+
             try
             {
-                UploadBase64(Helper.GetFileInBase64()).Wait();
+                //UploadBase64(Helper.GetFileInBase64()).Wait();
 
-                UploadBytes(Helper.GetFileInBytes()).Wait();
+                //UploadBytes(Helper.GetFileInBytes()).Wait();
 
-                UploadPath(Helper.GetPath()).Wait();
+                //UploadPath(Helper.GetPathImage()).Wait();
+
+                //GetUrlWithExpires();
+
+                //MakeUrl();
+
+                // DownloadFile().Wait();
+
+                // GetFileInBytes().Wait();
             }
             catch (Exception ex)
             {
@@ -25,6 +36,9 @@ namespace S3Core
             }
         }
 
+        /* ******************************* Upload *********************************************/
+        #region #Upload Methods
+        
         private async static Task UploadBase64(string base64)
         {
             var bytes = Convert.FromBase64String(base64);
@@ -48,7 +62,7 @@ namespace S3Core
         /* main method for uploading to S3 */
         private async static Task Upload(MemoryStream ms)
         {
-            var s3Client = new AmazonS3Client(RegionEndpoint.USEast1);
+            using var s3Client = new AmazonS3Client(RegionEndpoint.USEast1);
 
             var transfer = new TransferUtility(s3Client);
 
@@ -59,8 +73,70 @@ namespace S3Core
                 Key = Guid.NewGuid() + ".jpg",
                 InputStream = ms,
             });
-
-            s3Client.Dispose();
         }
+
+        #endregion
+
+
+
+        /* ******************************* Download *********************************************/
+        #region #Download Methods
+
+        private static void GetUrlWithExpires()
+        {
+            using var s3Client = new AmazonS3Client(RegionEndpoint.USEast1);
+
+            var url = s3Client.GetPreSignedURL(new GetPreSignedUrlRequest
+            {
+                BucketName = "edmar-bucket-test",
+                Key = "image.jpg",
+                Expires = DateTime.UtcNow.AddMinutes(1),
+            });
+
+            Console.WriteLine("URL: " + url);
+        }
+
+        private static void MakeUrl()
+        {
+            var bucketName = "edmar-bucket-test";
+            var keyName = "image.jpg";
+            var url = $"https://{bucketName}.s3.amazonaws.com/{keyName}";
+
+            Console.WriteLine("URL: " + url);
+        }
+
+        private async static Task DownloadFile()
+        {
+            using var s3Client = new AmazonS3Client(RegionEndpoint.USEast1);
+
+            var transfer = new TransferUtility(s3Client);
+
+            var localPath = "C:/teste/file-s3.jpg";
+
+            await transfer.DownloadAsync(localPath, "edmar-bucket-test", "image.jpg");
+        }
+
+        private static async Task<byte[]> GetFileInBytes()
+        {
+            using var s3Client = new AmazonS3Client(RegionEndpoint.USEast1);
+
+            var response = await s3Client.GetObjectAsync(new GetObjectRequest
+            {
+                BucketName = "edmar-bucket-test",
+                Key = "image.jpg"
+            });
+
+            using var responseStream = response.ResponseStream;
+            
+            using var memoryStream = new MemoryStream();
+
+            await responseStream.CopyToAsync(memoryStream);
+
+            var bytes = memoryStream.GetBuffer();
+
+            return bytes;
+        }
+
+        #endregion
     }
 }
