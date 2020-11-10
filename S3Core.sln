@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30621.155
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "S3Core", "S3Core\S3Core.csproj", "{9BBB5BDC-BF97-4351-90CB-09A0FA5F4989}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9BBB5BDC-BF97-4351-90CB-09A0FA5F4989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BBB5BDC-BF97-4351-90CB-09A0FA5F4989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BBB5BDC-BF97-4351-90CB-09A0FA5F4989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BBB5BDC-BF97-4351-90CB-09A0FA5F4989}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E7A40870-3B57-466A-B7E9-12BE4DE41B2E}
+	EndGlobalSection
+EndGlobal
